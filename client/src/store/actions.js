@@ -1,0 +1,13 @@
+export const SET_CURRENT_USER = "LOGIN_USER";
+export const LOGOUT_USER = "LOGOUT_USER";
+export const SET_QUIZ = "SET_QUIZ";
+export const SET_CHOICE = "SET_CHOICE";
+export const MARK_CHOICE = "MARK_CHOICE";
+export const RESET_CHOICE = "RESET_CHOICE";
+export const SET_SCORE = "SET_SCORE";
+export const RE_QUIZ ="RE_QUIZ";
+export const RESET_QUIZ = "RESET_QUIZ";
+export const SET_TO_PAY_USER = "SET_TO_PAY_USER";
+export const SET_DONE_SUPER = "SET_DONE_SUPER";
+export const SET_CONTAIN_ADMIN = "SET_DONE_SUPER";
+export const SET_QUIZ_TYPE = "SET_QUIZ_TYPE";
