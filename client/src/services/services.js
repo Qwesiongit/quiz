@@ -15,12 +15,12 @@ const ADMIN_LOGIN_API_ENDPOINT = 'http://localhost:8595/api/admin/login';
 const ADMIN_LOGOUT_API_ENDPOINT = 'http://localhost:8595/api/admin/logout';
 const ADMIN_REGISTER_API_ENDPOINT = 'http://localhost:8595/api/admin/register';
 const ADMIN_UPDATE_API_ENDPOINT = 'http://localhost:8595/api/admin/updateadmin';
-//const CHECKLOGIN_API_ENDPOINT = 'http://localhost:8595/api/checklogged';
+const USER_PAYMENTS_API_ENDPOINT = 'http://localhost:8595/api/user/mypayments';
 const IFADMIN_API_ENDPOINT ='http://localhost:8595/api/admin/isexist';
 const COURSE_ADD_API_ENDPOINT ='http://localhost:8595/api/admin/addcategory';
 const GET_COURSES_ENDPOINT="http://localhost:8595/api/admin/getcourses";
 const ADD_QUESTION_ENDPOINT="http://localhost:8595/api/admin/addquestion";
-//const GET_QUESTIONS_ENDPOINT="http://localhost:8595/api/admin/getquestions";
+const GET_PAYMENTS_ENDPOINT="http://localhost:8595/api/admin/showpayments";
 const ADD_FILE_END_POINT ='http://localhost:8595/api/admin/addqfile';
 const DO_CHECK_LOGGED_IN_ENDPOINT ='http://localhost:8595/api/user/checkwhologged';
 const GET_USERS_ENDPOINT ='http://localhost:8595/api/admin/getusers';
@@ -299,6 +299,15 @@ export const showScore = (_user)=>{
 
 };
 
+export const show_my_payments = (_user)=>{
+    return _axios.post(USER_PAYMENTS_API_ENDPOINT,_user).then(res=>{
+        return(res);
+    }).catch(er=>{
+        console.log(er);
+    });
+
+};
+
 export const doActivate = (__user)=>{
     return _axios.post(ACTIVATE_ENDPOINT,__user).then(res=>{
         return(res.data);
@@ -324,5 +333,12 @@ export const doAdminActivates = (__user)=>{
 };
 
 
+export const all_payments = ()=>{
+    return _axios.post(GET_PAYMENTS_ENDPOINT).then(res=>{
+        return(res.data);
+    }).catch(er=>{
+        console.log(er);
+    });
+};
 
 

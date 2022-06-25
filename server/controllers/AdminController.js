@@ -953,6 +953,22 @@ const changePassword =(req,res)=>{
     }
 
 
+    const showPayments = (req,res)=>{
+        if(req.session.user && req.session.user.user_type==="admin"){
+            Payments.find().then(all=>{
+               // console.log(all);
+                if (all.length===0) {
+                    return res.send({success:false,message:"No payment records"});
+                    } else {
+                        return res.send({success:true,payment:all});
+                   }
+            }).catch(err=>{
+                console.log(err);
+                res.send(err);
+               });
+        }
+    }
+
     ///app.post('/api/admin/activates',isloggedin,do_activation);
 
     //app.post('/api/admin/deactivates',isloggedin,de_activation);
@@ -988,6 +1004,8 @@ const changePassword =(req,res)=>{
      app.post('/api/admin/getquestions',isloggedin,showQuestions);
 
      app.post('/api/admin/getusers',isloggedin,showUsers);
+
+     app.post('/api/admin/showpayments',isloggedin,showPayments);
 
      app.post('/api/admin/changepassword',isloggedin,changePassword);
 

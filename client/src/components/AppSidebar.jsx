@@ -34,7 +34,7 @@ export default function AppSidebar() {
         <li><Link className="_isdL" to="/addcourse">ADD COURSE</Link></li>
         <li><Link className="_isdL" to="/adminupdate">EDIT BIO</Link></li>
         <li><Link className="_isdL" to="/alterpassword">CHANGE PASSWORD</Link></li>
-        <li><Link className="_isdL" to="/doactivations">ACTIVATIONS</Link></li>
+        { user.admin_type=="super" &&<li><Link className="_isdL" to="/doactivations">ACTIVATIONS</Link></li>}
       </ul>
         </>
         :

@@ -479,9 +479,16 @@ const showCourses_ =(req,res)=>{
         }
     }
 
-const getpay_recors= (req,res)=>{
-    if(req.session.user){
-        Payments.findOne({_user:this_user._id}).exec((err,doc))
+const getpay_records= (req,res)=>{
+    if(req.session.user && req.session.user.email===req.body.email){
+        let this_user = req.session.user._id;
+        Payments.findOne({user:this_user}).then(doc=>{
+            if(doc!==null){
+                return res.send({success:true,data:doc});
+            }else{
+                return res.send({success:false,message:"you have no payments recorded"});
+            }
+        }).catch(er=>console.log(er));
     }else{
         return  res.send({success:false,message:"You are not logged in or not qualified to do this activity"});
     }
@@ -491,7 +498,7 @@ const getpay_recors= (req,res)=>{
           User.findOne({email:req.body.email}).
           then(this_user=>{
               if(!(this_user===null)){
-                  Payments.findOne({_user:this_user._id}).
+                  Payments.findOne({user:this_user._id}).
                   exec((err,doc)=>{
                       if (err) {
                           res.send(err);
@@ -499,10 +506,10 @@ const getpay_recors= (req,res)=>{
                         let today = new Date();
                           if(doc===null){
                               let topay = new Payments();
-                              topay._user=this_user._id;
-                              topay._amount_paid=req.body.amount;
-                              topay._days_left="20";
-                              topay.payment_records.push({_amount_paid:req.body.amount,_paid_on:today.toLocaleDateString()});
+                              topay.user=this_user._id;
+                              topay.subscription=req.body.subscription;
+                              topay.remaining_days=req.body.remaining_days;
+                              topay.payment_records.push({amount_paid:req.body.amount,paid_on:today.toLocaleDateString()});
                               topay.save().then(payed=>{
                                 if(payed!==null){
                                 return res.send({success:true,message:"payment effected.You will be notified soon when activated."});
@@ -511,14 +518,14 @@ const getpay_recors= (req,res)=>{
                                res.send(err);
                              });
                          }else{
-                             if(doc._expired===true){
-                            doc._amount_paid=req.body.amount;
-                            doc._days_left="20";
-                            doc._expired="no";
-                            doc.payment_records.push({_amount_paid:req.body.amount,_paid_on:today.toLocaleDateString()});
+                             if(doc.expired===true){
+                            topay.subscription=req.body.subscription;
+                            topay.remaining_days=req.body.remaining_days;
+                            doc.expired="no";
+                            topay.payment_records.push({amount_paid:req.body.amount,paid_on:today.toLocaleDateString()});
                             doc.save().then(payed=>{
                               if(payed!==null){
-                              return res.send({success:true,message:"payment effected.You will be notified soon when activated."});
+                              return res.send({success:true,message:"payment effected.You will be renewed."});
                             }
                            }).catch(function (errr) {
                                    res.send(errr);
@@ -627,5 +634,8 @@ const getpay_recors= (req,res)=>{
    app.post('/api/user/resetpassword',passwordReset);
    
    app.get('/api/user/logout',logoff,dologout);
+
+   app.post('/api/user/mypayments',isloggedin,getpay_records);
+
 
     }

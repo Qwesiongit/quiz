@@ -63,6 +63,32 @@ export const handle_img  = ()=>{
     return img;
 
 }
+
+export const trim_rand = (arr)=>{
+    let f_arr = [];
+    let r1=null;
+    let r2=null;
+
+        r1=Math.floor(Math.random()*arr.length);
+        r1===arr.length-1?r2=r1-1:r2=r1+1;
+        let fe = arr[r1];
+        let se = arr[r2];
+
+        if(fe!==undefined && se!==undefined){
+          f_arr=[fe,se]
+       }
+       if(fe===undefined && se!==undefined){
+        f_arr=[se]
+      }
+      if(fe!==undefined && se===undefined){
+        f_arr=[fe]
+    }
+
+    return(f_arr)
+    
+}
+
+
 export const rand_course = (arr)=>{
   var q_arr = [];
   let course_info = {};
@@ -87,7 +113,7 @@ export const rand_course = (arr)=>{
   let qs = c_s.question_items;
   if(!(qs.length===0)){
   ran1 = Math.floor(Math.random()*qs.length);
-  ran1===qs.length?ran2=ran1-1:ran2=ran1+1;
+  ran1===qs.length-1?ran2=ran1-1:ran2=ran1+1;
   let first = qs[ran1];
   let second = qs[ran2];
   if(first!==undefined && second!==undefined){

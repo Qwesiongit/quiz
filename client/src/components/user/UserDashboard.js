@@ -1,10 +1,10 @@
 import React,{useContext,useEffect,useRef,useState} from 'react';
 import {useNavigate as useHistory,Navigate as Redirect} from 'react-router-dom';
-import { checkloggein,getCourses_,showScore } from './../../services/services';
+import { checkloggein,getCourses_,showScore,show_my_payments } from './../../services/services';
 import userContext from '../../context/userContext';
 import { SET_CURRENT_USER } from '../../store/actions';
 //import {makeStyles,useTheme} from '@mui/styles';
-import { monitor_fade,rand_course } from '../../services/custom';
+import { monitor_fade,rand_course,trim_rand } from '../../services/custom';
 import AppSidebar from './../AppSidebar';
 let q_t = ["general","past question"];
 
@@ -34,9 +34,6 @@ export default function UserDashboard() {
     let [is_pay, set_is_pay] = useState(false);
     
 
-console.log("Two quiz history",twohis);
-
-
 const _do_randsubject = (_type)=>{
   let a_type=null;
   let level_course=[];
@@ -55,35 +52,15 @@ const _do_randsubject = (_type)=>{
             level_course.push(element);
         } 
     });
-    let ran1=null;
-    let ran2=null;
-    ran1 = Math.floor(Math.random()*level_course.length);
-    ran1===level_course.length?ran2=ran1-1:ran2=ran1+1;
-    let sbj1 = level_course[ran1];
-    let sbj2 = level_course[ran2];
-    console.log(_type,level_course[ran1],level_course[ran2]);
+   
+    let d_f= trim_rand(level_course);
+    
     if(_type==="general"){
-        if(sbj1!==undefined && sbj2!==undefined){
-            setgqs([sbj1,sbj2])
-        }
-        if(sbj1===undefined && sbj2!==undefined){
-            setgqs([sbj2])
-        }
-        if(sbj1!==undefined && sbj2===undefined){
-            setgqs([sbj1])
-        }
+        setgqs(d_f);
     }
 
     if(_type==="past question"){
-        if(sbj1!==undefined && sbj2!==undefined){
-            setpqs([sbj1,sbj2])
-        }
-        if(sbj1===undefined && sbj2!==undefined){
-            setpqs([sbj2])
-        }
-        if(sbj1!==undefined && sbj2===undefined){
-            setpqs([sbj1])
-        }
+            setpqs(d_f)  
     }
 
 
@@ -95,36 +72,44 @@ const _do_randsubject = (_type)=>{
 const _dorandpayment = ()=>{
     let ran1=null;
     let ran2=null;
+    let p1=null;
+    let p2=null;
     let _his = [];
+    let me = user.email;
+    let _this_person = {email:me};
+    show_my_payments(_this_person).then(res=>{
+     let dstat = res.data.success;
+     if(dstat===true){
+        _his = res.data.data.payment_records;
+        ran1 = _his.length-1;
+        ran2=ran1-1;
+        p1=_his[ran1];
+        p2=_his[ran2];
+        if(p2!==undefined){
+            set_pay([p1,p2]);
+        }else{
+            set_pay([p1]);
+        }
+        set_is_pay(true);
+     }else{
+        set_pay([]);
+        set_is_pay(true);
+     }
+    });
     
 }
 
 const _dorandhistory = ()=>{
-    let ran1=null;
-    let ran2=null;
     showScore({user:user._id}).then(res=>{
         if(!(res.success)){
-            console.log(res.message);
+           // console.log(res.message);
             set_is_his(false);
             set_his([]);
         }else{
            set_is_his(true);
            let hs = res.scores.quiz_history;
-           console.log(hs);
-           ran1 = Math.floor(Math.random()*hs.length);
-           ran1===hs.length?ran2=ran1-1:ran2=ran1+1;
-           let h1_ = hs[ran1];
-           let h2_ = hs[ran2];
-           if(h1_!==undefined && h2_!==undefined){
-            set_his([h1_,h2_])
-           }
-           if(h1_===undefined && h2_!==undefined){
-            set_his([h2_])
-           }
-           if(h1_!==undefined && h2_===undefined){
-            set_his([h1_])
-           }
-           
+           let d_f= trim_rand(hs);
+           set_his(d_f);
         }
     })
 
@@ -176,11 +161,12 @@ const _dorandhistory = ()=>{
     useEffect(()=>{
        document.title="user Dashboard";
        handle_log_in();
-       userTimed();
        _dorandhistory();
        _do_randsubject("general");
        _do_randsubject("past question");
        _dorandhistory();
+       _dorandpayment();
+       userTimed();
        return (()=>{
            clearInterval(u_ref.current);
        })
@@ -262,10 +248,39 @@ if(!(isloggedin) && !(user.usertype==="normal")){
         </div>
 
         <div id="_usmd1">
+
         <div className="_one">
-          <h5 className='_dhd'>PAYMENT HISTORY</h5>
-         
+          <h5 className='_dhd'>MOST RECENT SUBSCRIPTONS</h5>
+          <table className='table table-striped'>
+             <thead>
+               <tr>
+               <th>subscribtion</th>
+               <th>Amount paid</th>
+               <th>Date</th>
+               </tr>
+             </thead>
+             <tbody>
+                 {
+                     is_pay!==false && 
+                     twopay!==undefined && twopay.map((s,id)=>(
+                        <tr key={id}>
+                        <td>{s.subscription}</td>
+                        <td>{s.amount_paid}</td>
+                        <td>{s.paid_on}</td>
+                      </tr>
+                     ))
+                     
+
+                 }
+                 {
+                    is_pay===true &&
+                    <tr className='mt-4'><td>NO PAYMENT HISTORY</td></tr>
+                    }
+              
+             </tbody>
+             </table>
         </div>
+
         <div className="_one">
           <h5 className='_dhd'>PAST QUESTION SUBJECTS</h5>
 

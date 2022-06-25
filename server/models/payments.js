@@ -6,15 +6,16 @@ const bcrypt = require('bcrypt');
 let nodate = new Date;
 
 const recordSchema = new mongoose.Schema({
-    _amount_paid:{type:String,required:true},
-   _paid_on:{type:String}
+    amount_paid:{type:String,required:true},
+    subscription:{type:String,default:"1 day"},
+    paid_on:{type:String}
 });
 
 const paySchema = new mongoose.Schema({
-    _user:{type:mongoose.Schema.ObjectId,required:true,ref:"User"},
-    _subscription:{type:String,default:"1 day"},
-    _remaining_days:{type:String},
-    _expired:{type:String,default:"no"},
+    user:{type:mongoose.Schema.ObjectId,required:true,ref:"User"},
+    subscription:{type:String,default:"1 day"},
+    remaining_days:{type:String},
+    expired:{type:String,default:"no"},
     payment_records:[recordSchema]
 
 });

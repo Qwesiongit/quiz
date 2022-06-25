@@ -90,6 +90,8 @@ export default function PasswordChange() {
     }else{
     return (
         <div className='mt-8'>
+            <br/>
+            <br/>
 <Grid container>
 <Grid item xs={2}></Grid>
 <Grid item xs={8}>

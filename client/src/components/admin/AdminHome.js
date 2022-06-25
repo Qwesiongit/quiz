@@ -25,7 +25,7 @@ export default function AdminHome() {
     let [state,dispatch] = useContext(userContext);
     let [containadmin, setcontainadmin] = useState(true);
     let [cuerrors, setcuerrors] = useState([]);
-    let {/*user,isloggedin,*/forsuper}=state;
+    let {user,isloggedin,forsuper}=state;
     let adhdstyle = adhdoStyle();
     
     
@@ -86,8 +86,14 @@ export default function AdminHome() {
 
    if(!(containadmin)){
     return <Redirect to="/addsuper"/>
- }else{
-
+   }
+    if(isloggedin && user.user_type==="admin"){
+       return <Redirect to="/admindashbord"/>
+    }
+    if(isloggedin && user.user_type==="normal"){
+      return <Redirect to="/userdashboard"/>
+    }
+    if(isloggedin===false){
     return (
         <div className='mt-5'>
 
@@ -123,6 +129,6 @@ export default function AdminHome() {
 </Grid>
         </div>
     )
-            }
+}
     
 }

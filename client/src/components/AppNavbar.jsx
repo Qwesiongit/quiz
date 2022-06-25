@@ -46,19 +46,19 @@ export default function AppNavbar() {
        {
           !isloggedin &&
           <>
-        <li className="f_ul"><Link to="/"><i className='fa fa-book'></i> HOME</Link></li>
-        <li className="f_ul"><Link to="/"><i className='fa fa-book'></i> ABOUT</Link></li>
+        <li className="f_ul"><Link to="/"><i className='fa fa-home'></i> HOME</Link></li>
+        <li className="f_ul"><Link to="/"><i className='fa fa-address-card'></i> ABOUT</Link></li>
         <li className="f_ul"><Link to="/"><i className='fa fa-phone'></i> CONTACT</Link></li>
-        <li className="f_ul"><Link to="/register"><i className='fa fa-car'></i> REGISTER</Link></li>
-        <li className="f_ul"><Link to="/login"><i className='fa fa-bus'></i> LOGIN</Link></li>
+        <li className="f_ul"><Link to="/register"><i className='fa fa-user-plus'></i> SIGNUP</Link></li>
+        <li className="f_ul"><Link to="/login"><i className='fas fa-sign-in-alt'></i> LOGIN</Link></li>
        
-        <li id="men_1"><Link to="#"><i className='fa fa-bus'></i> MENU</Link>
+        <li id="men_1"><Link to="#"><i className='fa fa-bars'></i> MENU</Link>
         <div id="m1_sub">
         <ul>
-        <li><Link to="/"><i className='fa fa-book'></i> ABOUT</Link></li>
+        <li><Link to="/"><i className='fa fa-address-card'></i> ABOUT</Link></li>
         <li><Link to="/"><i className='fa fa-phone'></i> CONTACT</Link></li>
-        <li><Link to="/register"><i className='fa fa-car'></i> REGISTER</Link></li>
-        <li><Link to="/login"><i className='fa fa-bus'></i> LOGIN</Link></li>
+        <li><Link to="/register"><i className='fa fa-user-plus'></i> REGISTER</Link></li>
+        <li><Link to="/login"><i className='fas fa-sign-in-alt'></i> LOGIN</Link></li>
         </ul>
         </div>
         </li>
@@ -67,7 +67,7 @@ export default function AppNavbar() {
         {
          isloggedin &&
          <>
-       <li id='_navmenu'><Link to="#"><i className='fa fa-pen'></i> MENU</Link>
+       <li id='_navmenu'><Link to="#"><i className='fa fa-bars'></i> MENU</Link>
        <div className='sub-menu'>
          <ul>
          {
@@ -80,7 +80,7 @@ export default function AppNavbar() {
         <li><Link className="_isdL" to="/adminupdate">EDIT BIO</Link></li>
         <li><Link className="_isdL" to="/alterpassword">CHANGE PASSWORD</Link></li>
         <li><Link className="_isdL" to="/doactivations">ACTIVATIONS</Link></li>
-        <li><button onClick={handlogout} className='btn btn-danger'> LOGOUT</button></li>
+        <li><button onClick={handlogout} className='btn btn-danger'><li className='fas fa-sign-out'></li> LOGOUT</button></li>
       </ul>
         </>
         :
